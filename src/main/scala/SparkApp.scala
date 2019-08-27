@@ -114,6 +114,7 @@ object SparkApp {
       .load(dataFile)
 
 
+
     spark.udf.register("file_name", (path: String) => path.substring(path.lastIndexOf("/") + 1, path.lastIndexOf(".")))
 
     val dataFrameWithFilename: DataFrame = dataFrameWithParsedSchema.withColumn("fileName", callUDF("file_name", input_file_name()))
