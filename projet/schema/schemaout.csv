@@ -1,0 +1,15 @@
+{
+ "_c0" : "Integer",
+"carat": "String",
+"cut": "String",
+"color": "String",
+"clarity": "String",
+"depth": "Double",
+"table":"String",
+"price":"String",
+"x":"Double",
+"y":"Double",
+"z":"Double"
+}
+
+
