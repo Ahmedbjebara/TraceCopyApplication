@@ -1,11 +1,16 @@
-import org.apache.spark.rdd.RDD
+import java.io.{File, FileInputStream, _}
 import java.nio.file.{Files, Paths, StandardCopyOption}
-import java.io._
 import java.security.{DigestInputStream, MessageDigest}
-import java.io.{File, FileInputStream}
+import java.text.SimpleDateFormat
+
+import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{DataFrame, SparkSession}
+
 import scala.io.Source
+
+
+
 
 
 object SparkApp {
@@ -33,6 +38,8 @@ object SparkApp {
     val sourceDirectory: File = new File("C:/Users/dell/IdeaProjects/Realtimecheksum/projet/source/")
 
 
+
+
     if (sourceDirectory.exists && sourceDirectory.isDirectory) {
       fileList = sourceDirectory.listFiles.filter(_.isFile).toList
     } else {
@@ -57,7 +64,7 @@ object SparkApp {
     val headerFileWriter = new FileWriter(new File("C:/Users/dell/IdeaProjects/Realtimecheksum/projet/trace/trace.csv"), true)
 
     if (Source.fromFile("C:/Users/dell/IdeaProjects/Realtimecheksum/projet/trace/trace.csv").isEmpty)
-      headerFileWriter.write("File;Source;Destination;State;Cheksum;Message" + String.format("%n"))
+      headerFileWriter.write("File;Source;Destination;State;Cheksum;Message;Size;LastModifiedDate" + String.format("%n"))
     headerFileWriter.close()
 
 
@@ -73,6 +80,9 @@ object SparkApp {
         val hash: String = computeHash("C:/Users/dell/IdeaProjects/Realtimecheksum/projet/source/" + selectedFile.getName)
         val fileWriter = new FileWriter(new File("C:/Users/dell/IdeaProjects/Realtimecheksum/projet/trace/trace.csv"), true)
         val exists = Files.exists(Paths.get("C:/Users/dell/IdeaProjects/Realtimecheksum/projet/destination/" + selectedFile.getName))
+        val length = selectedFile.length()
+        val sdateformat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+        val lastmodifieddate = sdateformat.format(selectedFile.lastModified())
 
 
         if ((!exists) && !arrayChecksum.contains(hash)) {
@@ -81,19 +91,19 @@ object SparkApp {
             Paths.get("C:/Users/dell/IdeaProjects/Realtimecheksum/projet/destination/" + selectedFile.getName), StandardCopyOption.REPLACE_EXISTING)
 
           fileWriter.write(selectedFile.getName + ";" + selectedFile.getAbsolutePath + ";" + "C:/Users/dell/IdeaProjects/Realtimecheksum/projet/destination/"
-            + selectedFile.getName + ";MOVE SUCCESS: File's Name  dosen't exist yet !" + ";" + hash + ";Cheksum dosen't exist yet !" + String.format("%n"))
+            + selectedFile.getName + ";MOVE SUCCESS: File's Name  dosen't exist yet !" + ";" + hash + ";Cheksum dosen't exist yet !"+ ";" + length +";"+lastmodifieddate+ String.format("%n"))
 
         }
         else {
 
           if (arrayChecksum.contains(hash) && (!exists)) {
             fileWriter.write(selectedFile.getName + ";" + selectedFile.getAbsolutePath + ";" + "C:/Users/dell/IdeaProjects/Realtimecheksum/projet/destination/"
-              + selectedFile.getName + ";MOVE FAILED" + ";" + hash + ";Cheksum Exist Already !" + String.format("%n"))
+              + selectedFile.getName + ";MOVE FAILED" + ";" + hash + ";Cheksum Exist Already !" ++ ";" + length+";"+lastmodifieddate +String.format("%n"))
           }
           else {
             fileWriter.write(selectedFile.getName + ";" + selectedFile.getAbsolutePath + ";" + "C:/Users/dell/IdeaProjects/Realtimecheksum/projet/destination/"
               + selectedFile.getName + ";MOVE FAILED: File's Name Already Exists"
-              + ";" + hash + "; " + String.format("%n"))
+              + ";" + hash + "; " ++ ";" +length+";"+lastmodifieddate +String.format("%n"))
           }
         }
 
@@ -123,8 +133,13 @@ object SparkApp {
       .partitionBy("filename")
       .parquet(resultFile)
 
+
+
+
+
     Thread.sleep(100000000)
   }
+
 }
 
 
