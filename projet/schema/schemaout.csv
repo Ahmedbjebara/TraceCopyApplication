@@ -1,5 +1,5 @@
 {
- "_c0" : "Integer",
+"_c0" : "Integer",
 "carat": "String",
 "cut": "String",
 "color": "String",
@@ -11,5 +11,3 @@
 "y":"Double",
 "z":"Double"
 }
-
-

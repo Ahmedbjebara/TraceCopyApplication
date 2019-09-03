@@ -1,11 +1,15 @@
 import org.apache.spark.sql.types.{BooleanType, DataType, DoubleType, IntegerType, StringType, StructField, StructType}
 import scala.io.Source
 
+
 object CsvSchemaParser {
 
 
   def parseCsvFileToSchema (schemaFile : String):StructType =
   {
+
+    println(schemaFile)
+
     val sourceFile = Source.fromFile(schemaFile).mkString
     val schematoArrayofString = sourceFile.split(",").map(line=>
     {

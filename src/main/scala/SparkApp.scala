@@ -2,11 +2,10 @@ import java.io.{File, FileInputStream, _}
 import java.nio.file.{Files, Paths, StandardCopyOption}
 import java.security.{DigestInputStream, MessageDigest}
 import java.text.SimpleDateFormat
-
+import org.apache.spark.sql.functions.input_file_name
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{DataFrame, SparkSession}
-
 import scala.io.Source
 
 
@@ -24,15 +23,20 @@ object SparkApp {
       .config("spark.master", "local[*]")
       .getOrCreate()
 
-    if (args.length < 4) {
+    if (args.length < 1) {
       System.err.println(
         "Argument number's is not respected")
       System.exit(1)
     }
-    val dataFile: String = args(0)
-    val schemaFile: String = args(1)
-    val resultFile: String = args(2)
-    val readMode: String = args(3)
+    val argFile: String = args(0)
+
+    val argumentFile = Source.fromFile(argFile)
+    val argLines = argumentFile.mkString.split("\n")
+       val dataFile= argLines(0)
+       val schemaFile = argLines(1)
+       val resultFile = argLines(2)
+       val readMode = argLines(3)
+
 
     var fileList: List[File] = null
     val sourceDirectory: File = new File("C:/Users/dell/IdeaProjects/Realtimecheksum/projet/source/")
@@ -71,7 +75,7 @@ object SparkApp {
 
 
     if (Source.fromFile("C:/Users/dell/IdeaProjects/Realtimecheksum/projet/trace/trace.csv").nonEmpty) {
-      val traceFile = spark.read.option("delimiter", ";").option("header", "true") csv ("C:/Users/dell/IdeaProjects/Realtimecheksum/projet/trace/trace.csv")
+      val traceFile = spark.read.option("delimiter", ";").option("header", "true").csv("C:/Users/dell/IdeaProjects/Realtimecheksum/projet/trace/trace.csv")
       val arrayChecksum = traceFile.select("Cheksum").collect() //collection : ARRAY of rows
         .map(x => x.getString(0)) //collection : ARRAY of string
 
@@ -115,13 +119,13 @@ object SparkApp {
     else
       println("Trace file is empty!!!!!")
 
-    val schemaParse = CsvSchemaParser.parseCsvFileToSchema(schemaFile)
-
+    val schemaParse = CsvSchemaParser.parseCsvFileToSchema(schemaFile.trim)
+    println(schemaParse)
     val dataFrameWithParsedSchema = spark.read.format("csv")
       .option("header", "true")
       .option("mode", readMode)
       .schema(schemaParse)
-      .load(dataFile)
+      .load(dataFile.trim)
 
 
 
@@ -131,7 +135,7 @@ object SparkApp {
 
     dataFrameWithFilename.write
       .partitionBy("filename")
-      .parquet(resultFile)
+      .parquet(resultFile.trim)
 
 
 
