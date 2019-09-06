@@ -1,7 +1,7 @@
 import org.apache.spark.sql.types.{DoubleType, IntegerType, StringType, StructField, StructType}
 import org.scalatest.{FlatSpec, GivenWhenThen, Matchers}
 
-class CsvSchemaParserSpec extends FlatSpec with GivenWhenThen with Matchers{
+class ProcessDataFileSpec extends FlatSpec with GivenWhenThen with Matchers{
 
   behavior of "CsvSchemaParser"
 
@@ -24,7 +24,7 @@ val ReferenceSchema = StructType(
     Given ("an absolute path of a csv file")
     val path = "C:/Users/dell/IdeaProjects/Realtimecheksum/projet/schema/schemaout.csv"
     When ("parseCsvFileToSchema is invoked")
-   val resultatSchema =  CsvSchemaParser.parseCsvFileToSchema(path)
+   val resultatSchema =  ProcessDataFiles.parseCsvFileToSchema(path)
     Then (" a schema should be returned ")
     resultatSchema should equal (ReferenceSchema)
 
@@ -34,7 +34,7 @@ val ReferenceSchema = StructType(
     Given ("a string")
     val sourceType= "Integer"
     When ("replaceTypeToDatatype is invoked")
-    val resultatDataType =  CsvSchemaParser.replaceTypeWithDatatype(sourceType)
+    val resultatDataType =  ProcessDataFiles.replaceTypeWithDatatype(sourceType)
     Then (" a datatype should be returned ")
     resultatDataType should equal (destinationDataType)
 
