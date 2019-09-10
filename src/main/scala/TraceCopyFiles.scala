@@ -2,7 +2,9 @@
 import java.io.{File, FileInputStream, FileWriter}
 import java.nio.file.{Files, Paths}
 import java.security.{DigestInputStream, MessageDigest}
-import org.apache.spark.sql.{ SparkSession}
+
+import org.apache.spark.sql.{DataFrame, SparkSession}
+import java.text.SimpleDateFormat
 
 import scala.io.Source
 
@@ -95,6 +97,10 @@ object TraceCopyFiles {
 
 
 
+      val length = file.length()
+      val sdateformat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+      val lastmodifieddate = sdateformat.format(file.lastModified())
+
 
       val traceFileWriter = new FileWriter(new File(traceFilePath), true)
 
@@ -111,26 +117,31 @@ object TraceCopyFiles {
           Files.move(
             Paths.get(sourceDirectory+ file.getName),
             Paths.get(destinationDirectory + file.getName))
-          val   messageSuccess : String = file.getName + ";" + file.getAbsolutePath + ";" + destinationDirectory + file.getName + ";MOVE SUCCESS: File's Name  dosen't exist yet !" + ";" + hash + ";Cheksum dosen't exist yet !" + String.format("%n")
+          val   messageSuccess = file.getName + ";" + file.getAbsolutePath + ";" + destinationDirectory + file.getName + ";MOVE SUCCESS: File's Name  dosen't exist yet !" + ";" + hash + ";Cheksum dosen't exist yet !"+ ";"+ length + ";"+ lastmodifieddate+ String.format("%n")
           traceWriter(traceFileWriter,traceFilePath,messageSuccess )
+
         }
 
         case(true, false) => {
 
-          val messageFileNameExists= file.getName + ";" + file.getAbsolutePath + ";" + destinationDirectory + file.getName + ";MOVE FAILED: File's Name Already Exists" + ";" + hash + "; " + String.format("%n")
+          val messageFileNameExists= file.getName + ";" + file.getAbsolutePath + ";" + destinationDirectory + file.getName + ";MOVE FAILED: File's Name Already Exists" + ";" + hash + "; " + ";"+ length + ";"+ lastmodifieddate+ String.format("%n")
           traceWriter(traceFileWriter,traceFilePath,messageFileNameExists )
+
         }
 
         case(false, true) => {
 
-          val messageChecksumExists=file.getName + ";" + file.getAbsolutePath + ";" + destinationDirectory+ file.getName + ";MOVE FAILED" + ";" + hash + ";Cheksum Exists Already !" + String.format("%n")
+          val messageChecksumExists=file.getName + ";" + file.getAbsolutePath + ";" + destinationDirectory+ file.getName + ";MOVE FAILED" + ";" + hash + ";Cheksum Exists Already !" + ";"+ length + ";"+ lastmodifieddate+ String.format("%n")
           traceWriter(traceFileWriter, traceFilePath,messageChecksumExists )
+
         }
 
         case(true , true) => {
 
-          val messageChecksum_NameExists=file.getName + ";" + file.getAbsolutePath + ";" + destinationDirectory+ file.getName + ";MOVE FAILED" + ";" + hash + ";Cheksum AND Name Exists Already !" + String.format("%n")
+          val messageChecksum_NameExists=file.getName + ";" + file.getAbsolutePath + ";" + destinationDirectory+ file.getName + ";MOVE FAILED" + ";" + hash + ";Cheksum AND Name Exists Already !" + ";"+ length + ";"+ lastmodifieddate+ String.format("%n")
           traceWriter(traceFileWriter, traceFilePath,messageChecksum_NameExists )
+
+
         }
       }
       traceFileWriter.close()
@@ -138,10 +149,33 @@ object TraceCopyFiles {
     }
     //}
 
+
+
+ //def writeIntoHiveTable(file: File, sourceDirectory: String, destinationDirectory: String)={
+  //  val hash = computeHash(sourceDirectory + file.getName)
+//  val sdateformat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+ // val lastmodifieddate = sdateformat.format(file.lastModified())
+    //spark.sqlContext.sql("INSERT INTO TABLE employeeHive " +
+    //  (file.getName , file.getAbsolutePath , destinationDirectory  , "MOVE SUCCESS: File's Name  dosen't exist yet !" , hash, "Cheksum dosen't exist yet !", file.length , lastmodifieddate)
+   // )
+//}
+
+
+
+
+
     fileRdd.foreach(file =>
     {
       tracedMove(file, sourceDirectory, destinationDirectory,traceFilePath, tracedFilesChecksum) // 4 APPEL
+      //writeIntoHiveTable(file, sourceDirectory, destinationDirectory)
     }
+
     )
+  }
+
+  def traceFileToDF(tracePath: String, traceFileName: String):DataFrame ={
+   val traceFilePath=tracePath+traceFileName
+     spark.read.option("delimiter", ";").option("header", "true").csv(traceFilePath)
+
   }
 }
