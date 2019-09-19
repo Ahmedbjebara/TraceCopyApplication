@@ -37,10 +37,10 @@ object SparkApp {
   val partitionColumn: String = argLines(7).trim
 
 
-   TraceCopyFiles.tracedCopy(sourceDirectory, destinationDirectory, tracePath, traceFileName)
+   val dataFrameTrace =TraceCopyFiles.tracedCopy(sourceDirectory, destinationDirectory, tracePath, traceFileName)
 
-    val tracefileAsDF=TraceCopyFiles.traceFileToDF(tracePath,traceFileName)
-    tracefileAsDF.createOrReplaceTempView("my_temp_table")
+   // val tracefileAsDF=TraceCopyFiles.traceFileToDF(tracePath,traceFileName)
+    dataFrameTrace.createOrReplaceTempView("my_temp_table")
     spark.sql("drop table if exists my_table")
     spark.sql("create table my_table as select * from my_temp_table")
     spark.sql("select * from  my_table ").show()
