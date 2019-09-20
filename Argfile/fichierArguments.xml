@@ -1,0 +1,13 @@
+<arguments>
+<tracemethod>file</tracemethod>
+<destinationDirectory>C:/Users/dell/IdeaProjects/Realtimecheksum/projet/destination/</destinationDirectory>
+<tracePath>C:/Users/dell/IdeaProjects/Realtimecheksum/projet/trace/</tracePath>
+<traceFileName>trace.csv</traceFileName>
+<schemaFile>C:/Users/dell/IdeaProjects/Realtimecheksum/projet/schema/schemaout.csv</schemaFile>
+<resultFile>C:/Users/dell/IdeaProjects/Realtimecheksum/projet/resultat</resultFile>
+<readMode>PERMISSIVE</readMode>
+<partitionColumn>filename</partitionColumn>
+<sourceDirectory>C:/Users/dell/IdeaProjects/Realtimecheksum/projet/source/</sourceDirectory>
+<sourceFileFormat>csv</sourceFileFormat>
+
+</arguments>
