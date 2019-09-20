@@ -1,7 +1,7 @@
-import TraceCopyFiles.spark
-import org.apache.hadoop.hive.serde2.`lazy`.LazySimpleSerDe
+
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
+import scala.xml._
 import scala.io.Source
 
 
@@ -23,18 +23,22 @@ object SparkApp {
     System.exit(1)
   }
 
-    val argFile =args(0)
-    val argumentFile = Source.fromFile(argFile)
-    val argLines = argumentFile.mkString.split("\n")
 
-  val sourceDirectory: String= argLines(0).trim
-  val destinationDirectory: String = argLines(1).trim
-  val tracePath: String = argLines(2).trim
-    val traceFileName: String = argLines(3).trim
-  val schemaFile: String = argLines(4).trim
-  val resultFile: String = argLines(5).trim
-  val readMode: String = argLines(6).trim
-  val partitionColumn: String = argLines(7).trim
+    val argFile = XML.load(args(0))
+
+    //val argFile =args(0)
+  //  val argumentFile = Source.fromFile(argFile)
+  //  val argLines = argumentFile.mkString.split("\n")
+  val sourceDirectory=  (argFile \ "sourceDirectory").text
+  val destinationDirectory = (argFile \ "destinationDirectory").text
+  val tracePath = (argFile \ "tracePath").text
+    val traceFileName = (argFile \ "traceFileName").text
+  val schemaFile = (argFile \ "schemaFile").text
+  val resultFile = (argFile \ "resultFile").text
+  val readMode = (argFile \ "readMode").text
+  val partitionColumn = (argFile \ "partitionColumn").text
+
+println(sourceDirectory)
 
 
    val dataFrameTrace =TraceCopyFiles.tracedCopy(sourceDirectory, destinationDirectory, tracePath, traceFileName)

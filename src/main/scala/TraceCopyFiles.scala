@@ -3,6 +3,7 @@ import java.io.{File, FileInputStream, FileWriter}
 import java.nio.file.{Files, Paths}
 import java.security.{DigestInputStream, MessageDigest}
 
+
 import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
 import java.text.SimpleDateFormat
 
@@ -17,6 +18,9 @@ object TraceCopyFiles {
     .appName("SparkSchema")
     .config("spark.master", "local[*]")
     .getOrCreate()
+
+
+
 
   def tracedCopy(sourceDirectory: String, destinationDirectory: String, tracePath: String, traceFileName: String): DataFrame = {
     import spark.implicits._
