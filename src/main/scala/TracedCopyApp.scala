@@ -2,7 +2,7 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 import scala.xml._
 
 
-object AppClone {
+object TracedCopyApp {
   def main(args: Array[String]): Unit = {
 
     System.setProperty("hadoop.home.dir", "C:\\winutils")
@@ -25,9 +25,10 @@ object AppClone {
 
 
 
-      config.tracemethod match {
+      config.traceMethod match {
         case "file" => CopyFileService.tracedCopy(config.sourceDirectory, config.destinationDirectory, config.tracePath, config.traceFileName)
-       case "hivetable" => {CopyHiveTableService.tabletracedCopy(config.sourceDirectory, config.destinationDirectory)
+       case "hivetable" => {spark.sql("DROP TABLE TRACETABLE")
+         CopyHiveTableService.tabletracedCopy(config.sourceDirectory, config.destinationDirectory)
          spark.sql("SELECT * FROM TRACETABLE").show()}
 
       }

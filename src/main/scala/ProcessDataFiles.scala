@@ -41,7 +41,7 @@ object ProcessDataFiles {
         .parquet(resultFile)
     }
 
-    private def csvFileToStructType(schemaFile: String): StructType = {
+     def csvFileToStructType(schemaFile: String): StructType = {
 
       val sourceFile = Source.fromFile(schemaFile).mkString
       //TODO use specific library for parsing schema
@@ -57,7 +57,7 @@ object ProcessDataFiles {
     }
 
 
-    private def replaceTypeWithDatatype(typeName: String): DataType = {
+     def replaceTypeWithDatatype(typeName: String): DataType = {
       typeName match {
         case "String" => StringType
         case "Integer" => IntegerType

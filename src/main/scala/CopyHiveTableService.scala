@@ -84,27 +84,27 @@ object CopyHiveTableService {
     val sdateformat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
     val lastmodifieddate = sdateformat.format(file.lastModified())
     // complexity is proportional to tracedFilesChecksum s length
-    var traceValue: trace = null
+    var traceValue: Trace = null
     (exists, tracedFilesChecksum.contains(hash)) match {
       case (false, false) => {
 
         Files.move(
           Paths.get(sourceDirectory + file.getName),
           Paths.get(destinationDirectory + file.getName))
-        traceValue = trace(file.getName, file.getAbsolutePath, destinationDirectory + file.getName, "MOVE SUCCESS: File's Name  dosen't exist yet !", hash, "Cheksum dosen't exist yet !", length.toString, lastmodifieddate)
+        traceValue = Trace(file.getName, file.getAbsolutePath, destinationDirectory + file.getName, "MOVE SUCCESS: File's Name  dosen't exist yet !", hash, "Cheksum dosen't exist yet !", length.toString, lastmodifieddate)
       }
 
       case (true, false) => {
 
         val messageFileNameExists = file.getName + ";" + file.getAbsolutePath + ";" + destinationDirectory + file.getName + ";MOVE FAILED: File's Name Already Exists" + ";" + hash + "; " + String.format("%n")
-        traceValue = trace(file.getName, file.getAbsolutePath, destinationDirectory + file.getName, "MOVE FAILED: File's Name Already Exists", hash, "", length.toString, lastmodifieddate)
+        traceValue = Trace(file.getName, file.getAbsolutePath, destinationDirectory + file.getName, "MOVE FAILED: File's Name Already Exists", hash, "", length.toString, lastmodifieddate)
 
       }
 
       case (false, true) => {
 
         val messageChecksumExists = file.getName + ";" + file.getAbsolutePath + ";" + destinationDirectory + file.getName + ";MOVE FAILED" + ";" + hash + ";Cheksum Exists Already !" + String.format("%n")
-        traceValue = trace(file.getName, file.getAbsolutePath, destinationDirectory + file.getName, "MOVE FAILED", hash, "Cheksum Exists Already !", length.toString, lastmodifieddate)
+        traceValue = Trace(file.getName, file.getAbsolutePath, destinationDirectory + file.getName, "MOVE FAILED", hash, "Cheksum Exists Already !", length.toString, lastmodifieddate)
 
       }
 
@@ -112,7 +112,7 @@ object CopyHiveTableService {
 
         val messageChecksum_NameExists = file.getName + ";" + file.getAbsolutePath + ";" + destinationDirectory + file.getName + ";MOVE FAILED" + ";" + hash + ";Cheksum AND Name Exists Already !" + String.format("%n")
 
-        traceValue = trace(file.getName, file.getAbsolutePath, destinationDirectory + file.getName, "MOVE FAILED", hash, "Cheksum AND Name Exists Already !", length.toString, lastmodifieddate)
+        traceValue = Trace(file.getName, file.getAbsolutePath, destinationDirectory + file.getName, "MOVE FAILED", hash, "Cheksum AND Name Exists Already !", length.toString, lastmodifieddate)
       }
 
     }

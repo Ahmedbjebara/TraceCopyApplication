@@ -1,4 +1,4 @@
-case class trace(
+case class Trace(
                   fileName : String ,
                   sourceDirectory : String ,
                   destinationDirectory : String ,

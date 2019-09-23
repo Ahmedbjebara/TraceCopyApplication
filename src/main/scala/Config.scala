@@ -7,5 +7,5 @@ case class Config(sourceDirectory: String,
                   readMode: String,
                   partitionColumn: String,
                   sourceFileFormat : String,
-                 tracemethod :String
+                  traceMethod :String
                  )

@@ -1,4 +1,3 @@
-import scala.io.Source
 import scala.xml.XML
 
 object ArgFileConf {
@@ -7,8 +6,6 @@ object ArgFileConf {
   def loadConfig(configPath: String): Config = {
 
     val argFile = XML.load(configPath)
-   // val argumentFile = Source.fromFile(configPath)
-   // val argLines = argumentFile.mkString.split("\n")
 
     val sourceDirectory=  (argFile \ "sourceDirectory").text
     val destinationDirectory = (argFile \ "destinationDirectory").text
