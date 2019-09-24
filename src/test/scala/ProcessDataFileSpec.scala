@@ -24,7 +24,7 @@ val ReferenceSchema = StructType(
     Given ("an absolute path of a csv file")
     val path = "C:/Users/dell/IdeaProjects/Realtimecheksum/projet/schema/schemaout.csv"
     When ("parseCsvFileToSchema is invoked")
-   val resultatSchema =  ProcessDataFiles.parseCsvFileToSchema(path)
+   val resultatSchema =  ProcessDataFiles.csvFileToStructType(path)
     Then (" a schema should be returned ")
     resultatSchema should equal (ReferenceSchema)
 
