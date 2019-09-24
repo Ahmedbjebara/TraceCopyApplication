@@ -23,13 +23,6 @@
             <version>2.4.3</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-hive -->
-        <dependency>
-        <groupId>org.apache.spark</groupId>
-        <artifactId>spark-hive_2.12</artifactId>
-        <version>2.4.4</version>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.scalatest/scalatest -->
         <dependency>
             <groupId>org.scalatest</groupId>
@@ -38,12 +31,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.scala-lang.modules/scala-xml -->
-        <dependency>
-            <groupId>org.scala-lang.modules</groupId>
-            <artifactId>scala-xml_2.12</artifactId>
-            <version>1.2.0</version>
-        </dependency>
 
 
     </dependencies>
