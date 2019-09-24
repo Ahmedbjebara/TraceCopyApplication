@@ -31,7 +31,7 @@ object AppClone {
          spark.sql("SELECT * FROM TRACETABLE").show()}
 
       }
-    spark.sql("SELECT * FROM TRACETABLE").show()
+
 
 
     val schema = ProcessDataFiles.parseSchema(config.schemaFile)
