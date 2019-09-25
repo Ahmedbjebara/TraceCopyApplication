@@ -1,5 +1,4 @@
 import org.apache.spark.sql.{DataFrame, SparkSession}
-import scala.xml._
 
 
 object TracedCopyApp {

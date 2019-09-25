@@ -43,7 +43,29 @@
             <version>1.2.0</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/me.legrange/yaml-config -->
+        <dependency>
+            <groupId>me.legrange</groupId>
+            <artifactId>yaml-config</artifactId>
+            <version>1.0</version>
+        </dependency>
 
+
+
+        <!-- https://mvnrepository.com/artifact/net.jcazevedo/moultingyaml -->
+        <dependency>
+            <groupId>net.jcazevedo</groupId>
+            <artifactId>moultingyaml_2.12</artifactId>
+            <version>0.4.1</version>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/org.scala-lang.modules/scala-xml -->
+        <dependency>
+            <groupId>org.scala-lang.modules</groupId>
+            <artifactId>scala-xml_2.12</artifactId>
+            <version>1.2.0</version>
+        </dependency>
 
     </dependencies>
 
