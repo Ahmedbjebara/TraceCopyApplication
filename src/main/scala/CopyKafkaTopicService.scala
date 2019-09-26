@@ -10,11 +10,11 @@ import java.text.SimpleDateFormat
 import scala.io.Source
 
 
-object CopyHiveTableService {
+object CopyKafkaTopicService {
 
 
 
-  def tabletracedCopy(sourceDirectory: String, destinationDirectory: String)(implicit spark: SparkSession) = {
+  def CopyKafkaTopicTableService(sourceDirectory: String, destinationDirectory: String)(implicit spark: SparkSession) = {
     import spark.implicits._
 
     initHiveTable()
@@ -48,7 +48,7 @@ object CopyHiveTableService {
 
   def initHiveTable( )(implicit spark: SparkSession)  = {
     spark.sql("CREATE TABLE IF NOT EXISTS TRACETABLE(File  STRING, Source STRING , Destination STRING , State STRING , Cheksum STRING , Message STRING , Size STRING ,LastModifiedDate STRING)")
-    }
+  }
 
 
 
@@ -66,7 +66,7 @@ object CopyHiveTableService {
 
 
   def getTracedFilesChecksum( )(implicit spark: SparkSession): Array[String] = {
-   spark.sqlContext.sql("SELECT Cheksum FROM TRACETABLE").collect()
+    spark.sqlContext.sql("SELECT Cheksum FROM TRACETABLE").collect()
       .map(x => x.getString(0))
   }
 
